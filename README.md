@@ -14,6 +14,6 @@ How to run?
 
 Create the following test table on your galera cluster. This test assumes that the schema name is 'test' :
 
-use test;
-create table snc (pk int(11), val int(11), ts timestamp(6), PRIMARY KEY (pk));
-insert into snc values (1, 0, NOW());
+1. use test;
+2. create table snc (pk int(11), val int(11), ts timestamp(6), PRIMARY KEY (pk));
+3. insert into snc values (1, 0, NOW());
