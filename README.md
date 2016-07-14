@@ -10,7 +10,7 @@ How to run?
 ----------------------------------------------
 
 1. scp target/galera-0.0.1-SNAPSHOT-jar-with-dependencies.jar TO_YOUR_SERVER
-2. java -jar galera-0.0.1-SNAPSHOT-jar-with-dependencies.ja --pass ROOT_USER_PASSWORD --db DATABASE_NAME --nodes SERVER_IP1,SERVER_IP2,SERVER_IP3  --sw 1
+2. java -jar galera-0.0.1-SNAPSHOT-jar-with-dependencies.jar --pass ROOT_USER_PASSWORD --db DATABASE_NAME --nodes SERVER_IP1,SERVER_IP2,SERVER_IP3  --sw 1
 
 Create the following test table on your galera cluster. This test assumes that the schema name is 'test' :
 

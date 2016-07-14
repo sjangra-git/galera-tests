@@ -74,7 +74,7 @@ public class simplified {
 		while (true) {
 			increment(nodeStates[0], cfg.pk);
 
-	        for(int i = 1; i<3; i++) {
+	        for(int i = 1; i<cfg.nodes.length; i++) {
 	        	queryAndReport(nodeStates[i], simplified.cfg.pk);
 	        }
 		}
@@ -158,13 +158,10 @@ public class simplified {
             	syncVariable = rs1.getString(1);
             }
 
-            if(!syncVariable.trim().equals("0")) {
-            	System.err.println("Session variable 'wsrep_causal_reads' is ON");
+            if(syncVariable.trim().equals("0")) {
+            	System.err.println("Session variable 'wsrep_causal_reads' is NOT ON");
             }
             rs1.close();
-
-
-
 
 
             // Read from source first
