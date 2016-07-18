@@ -14,27 +14,27 @@ WSREP_SYNC_VAL=1
 ###################################################
 ### Create test table ############################
 ###################################################
-mysql -h $SOURCE -u root -ppass123 -e "CREATE TABLE test.t1 (id INT PRIMARY KEY AUTO_INCREMENT) ENGINE=InnoDB;commit;"
-mysql -h $SOURCE -u root -ppass123 -e "INSERT INTO test.t1 VALUES (DEFAULT);commit;"
+mysql -h $SOURCE -u root -ppass123 -e "CREATE TABLE test.t1 (id INT PRIMARY KEY AUTO_INCREMENT) ENGINE=InnoDB;"
+mysql -h $SOURCE -u root -ppass123 -e "INSERT INTO test.t1 VALUES (DEFAULT);"
 
 ##let $qcache_size_orig = `SELECT @@GLOBAL.query_cache_size`
 mysql -h $SOURCE -u root -ppass123 -e "SET GLOBAL query_cache_size=1355776;"
 
-###### Set wsrep_sync_wait variable at GLOBAL level #########
-mysql -h $SOURCE -u root -ppass123 -e "SET GLOBAL wsrep_sync_wait = $WSREP_SYNC_VAL;"
-mysql -h $REPLICA -u root -ppass123 -e "SET GLOBAL wsrep_sync_wait = $WSREP_SYNC_VAL;"
+###### Set wsrep_sync_wait & autocommit variable at GLOBAL level #########
+mysql -h $SOURCE -u root -ppass123 -e "SET GLOBAL wsrep_sync_wait = $WSREP_SYNC_VAL, autocommit=ON;"
+mysql -h $REPLICA -u root -ppass123 -e "SET GLOBAL wsrep_sync_wait = $WSREP_SYNC_VAL, autocommit=ON;"
 
 
 count=1
-while [ "$count" -le 5000 ]
+while [ "$count" -le 50000 ]
 do
   ##connection node_1: Connect to first node and insert a row
-  mysql -h $SOURCE -u root -ppass123 -e "INSERT INTO test.t1 VALUES (DEFAULT);commit;"
-  mysql -h $SOURCE -u root -ppass123 -e "SET SESSION wsrep_sync_wait = $WSREP_SYNC_VAL; SELECT MAX(id) FROM test.t1;" > /tmp/f1
+  mysql -h $SOURCE -u root -ppass123 -e "INSERT INTO test.t1 VALUES (DEFAULT);"
+  mysql -h $SOURCE -u root -ppass123 -e "SELECT MAX(id) FROM test.t1;" > /tmp/f1
   val1=`tail -1 /tmp/f1`
 
   ##connection node_2: connect to second node and read from it
-  mysql -h $REPLICA -u root -ppass123 -e "SET SESSION wsrep_sync_wait = $WSREP_SYNC_VAL; SELECT MAX(id) FROM test.t1;" > /tmp/f2
+  mysql -h $REPLICA -u root -ppass123 -e "SELECT MAX(id) FROM test.t1;" > /tmp/f2
   val2=`tail -1 /tmp/f2`
 
   if [ "$val1" -ne "$val2" ] 
