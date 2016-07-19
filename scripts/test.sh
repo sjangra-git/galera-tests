@@ -17,8 +17,9 @@ WSREP_SYNC_VAL=1
 mysql -h $SOURCE -u root -ppass123 -e "CREATE TABLE test.t1 (id INT PRIMARY KEY AUTO_INCREMENT) ENGINE=InnoDB;"
 mysql -h $SOURCE -u root -ppass123 -e "INSERT INTO test.t1 VALUES (DEFAULT);"
 
-##let $qcache_size_orig = `SELECT @@GLOBAL.query_cache_size`
-mysql -h $SOURCE -u root -ppass123 -e "SET GLOBAL query_cache_size=1355776;"
+######## Set query cache OFF
+mysql -h $SOURCE -u root -ppass123 -e "SET @@global.query_cache_type=0;"
+mysql -h $REPLICA -u root -ppass123 -e "SET @@global.query_cache_type=0;"
 
 ###### Set wsrep_sync_wait & autocommit variable at GLOBAL level #########
 mysql -h $SOURCE -u root -ppass123 -e "SET GLOBAL wsrep_sync_wait = $WSREP_SYNC_VAL, autocommit=ON;"
